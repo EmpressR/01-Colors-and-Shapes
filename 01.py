@@ -135,7 +135,7 @@ def choice(click1, click2, click3, points, health_points):
               click1.color != click2.color, click1.color != click3.color, click2.color != click3.color,
               click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
         points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {point}")
+        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
         level_start(points, health_points)
 
     elif all([click1.bg == click2.bg, click1 == click3.bg,
