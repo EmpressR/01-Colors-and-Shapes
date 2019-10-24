@@ -1,4 +1,5 @@
-import random
+from random import choice
+from itertools import combinations
 
 
 class Object:
@@ -55,9 +56,6 @@ my_objects = (
 # ------------------------------------------------------------------------
 
 
-# ------------------------------------------------------------------------
-
-
 def new_game_easy():
 
     easy_points = 0
@@ -67,332 +65,315 @@ def new_game_easy():
 # ------------------------------------------------------------------------
 
 
-def create_board(points, health_points):
+def create_board(points, hp):
 
     board = []
     for piece in my_objects:
         board.append(piece)
 
-    a1 = random.choice(board)
+    a1 = choice(board)
     board.remove(a1)
 
-    a2 = random.choice(board)
+    a2 = choice(board)
     board.remove(a2)
 
-    a3 = random.choice(board)
+    a3 = choice(board)
     board.remove(a3)
 
-    b1 = random.choice(board)
+    b1 = choice(board)
     board.remove(b1)
 
-    b2 = random.choice(board)
+    b2 = choice(board)
     board.remove(b2)
 
-    b3 = random.choice(board)
+    b3 = choice(board)
     board.remove(b3)
 
-    c1 = random.choice(board)
+    c1 = choice(board)
     board.remove(c1)
 
-    c2 = random.choice(board)
+    c2 = choice(board)
     board.remove(c2)
 
-    c3 = random.choice(board)
+    c3 = choice(board)
 
     print([f"A) {a1.name}, B) {a2.name}, C) {a3.name}, D) {b1.name}, E) {b2.name}, F) {b3.name}, "
-           f" G) {c1.name}, H) {c2.name}, I) {c3.name}"])
+           f" G) {c1.name}, H) {c2.name}, I) {c3.name}, N) No possible matches"])
     choice_count = 0
     made_choices = []
-    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+    level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
 # ------------------------------------------------------------------------
 
 
-def level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+def level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
 
-    cl1 = input("> ")
+    click1 = inputs(input("> "), points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
-    if cl1 == "A":
-        click1 = a1
+    click2 = inputs(input("> "), points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
-    if cl1 == "B":
-        click1 = a2
+    click3 = inputs(input("> "), points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
-    if cl1 == "C":
-        click1 = a3
+    print(f"Choices were: {click1.name}, {click2.name} and {click3.name}")
 
-    if cl1 == "D":
-        click1 = b1
+    checking = False
+    choice1(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+            choice_count, made_choices, checking)
 
-    if cl1 == "E":
-        click1 = b2
+# ------------------------------------------------------------------------
 
-    if cl1 == "F":
-        click1 = b3
 
-    if cl1 == "G":
-        click1 = c1
+def inputs(cl, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
 
-    if cl1 == "H":
-        click1 = c2
+    letters = {
+        "A": a1,
+        "B": a2,
+        "C": a3,
+        "D": b1,
+        "E": b2,
+        "F": b3,
+        "G": c1,
+        "H": c2,
+        "I": c3,
+        "N": "N"
+    }
+    for letter in letters:
+        if cl == letter:
+            click = letters.get(letter)
+            if click == "N":
+                no_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+            return click
 
-    if cl1 == "I":
-        click1 = c3
+# ------------------------------------------------------------------------
 
-    # make click1 unusable
-    cl2 = input("> ")
 
-    if cl2 == "A":
-        click2 = a1
+def no_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
 
-    if cl2 == "B":
-        click2 = a2
-
-    if cl2 == "C":
-        click2 = a3
-
-    if cl2 == "D":
-        click2 = b1
-
-    if cl2 == "E":
-        click2 = b2
-
-    if cl2 == "F":
-        click2 = b3
-
-    if cl2 == "G":
-        click2 = c1
-
-    if cl2 == "H":
-        click2 = c2
-
-    if cl2 == "I":
-        click2 = c3
-
-    # make click2 unusable
-    cl3 = input("> ")
-
-    if cl3 == "A":
-        click3 = a1
-
-    if cl3 == "B":
-        click3 = a2
-
-    if cl3 == "C":
-        click3 = a3
-
-    if cl3 == "D":
-        click3 = b1
-
-    if cl3 == "E":
-        click3 = b2
-
-    if cl3 == "F":
-        click3 = b3
-
-    if cl3 == "G":
-        click3 = c1
-
-    if cl3 == "H":
-        click3 = c2
-
-    if cl3 == "I":
-        click3 = c3
-
-    print(f"Choices were: {click1.name}, {click2.name}, {click3.name}")
-
-    if choice_count > 0:
-        choice_count += 1
-        made_choices += click1, click2, click3
-        same_choices(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+    if check_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+        hp -= 1
+        print(f"There are still matches! Health points: {hp}")
+        if hp == 0:
+            game_over()
+        else:
+            level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
     else:
-        choice_count += 1
-        made_choices += click1, click2, click3
-
-    choice(click1, click2, click3, points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-           choice_count, made_choices)
+        points += 2
+        print(f"There are no more matches! Points: {points}")
+        create_board(points, hp)
 
 # ------------------------------------------------------------------------
 
 
+def check_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+
+    checking = True
+    used_board = [a1, a2, a3, b1, b2, b3, c1, c2, c3]
+
+    for x, y, z in combinations(used_board, 3):
+        print(zip(made_choices*3))
+        if any([(x, y, z), (x, z, y), (z, x, y), (z, y, x), [y, x, z], (y, z, x)]) not in zip(made_choices*3):
+            yes = choice1(x, y, z, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                          choice_count, made_choices, checking)
+            if yes:
+                print("True")
+                return True
+    return False
 # ------------------------------------------------------------------------
 
 
-def same_choices(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+def choice1(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+            choice_count, made_choices, checking):
 
-    made_choices1 = [made_choices[0], made_choices[1], made_choices[2]]
+    if all([click1.color == click2.color, click1.color == click3.color,
+            click1.shape == click2.shape, click1.shape == click3.shape]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.color == click2.color, click1.color == click3.color,
+              click1.bg == click2.bg, click1.bg == click3.bg]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.shape == click2.shape, click1.shape == click3.shape,
+              click1.bg == click2.bg, click1.bg == click3.bg]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.color == click2.color, click1.color == click3.color,
+              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
+              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.shape == click2.shape, click1.shape == click3.shape,
+              click1.color != click2.color, click1.color != click3.color, click2.color != click3.color,
+              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.bg == click2.bg, click1.bg == click3.bg,
+              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
+              click1.color != click2.color, click1.color != click3.color, click2.color != click3.color]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    elif all([click1.color != click2.color, click1.color != click3.color, click2.color != click3.color,
+              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
+              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
+        if checking:
+            return True
+        else:
+            choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+    else:
+        if checking:
+            return False
+        else:
+            hp -= 1
+            print(f"{click1.name} and {click2.name} and {click3.name} are not a match! Health points: {hp}")
+            if hp == 0:
+                game_over()
+            else:
+                level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+# ------------------------------------------------------------------------
+
+
+def choice2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+
+    choice_count += 1
+    made_choices += click1, click2, click3
+    same_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+
+# ------------------------------------------------------------------------
+
+
+def same_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+
+    if choice_count > 1:
+        choice_count2 = 0
+        made_choices1 = [made_choices[0], made_choices[1], made_choices[2]]
+        same_choices2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                      choice_count, choice_count2, made_choices, made_choices1)
+    else:
+        points_reward(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                      choice_count, made_choices)
+
+# ------------------------------------------------------------------------
+
+
+def same_choices2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                  choice_count, choice_count2, made_choices, made_choices1):
+
     for made_choice in made_choices1:
         if made_choices[-1] == made_choice:
             for made_choice2 in made_choices1:
                 if made_choices[-2] == made_choice2:
                     for made_choice3 in made_choices1:
                         if made_choices[-3] == made_choice3:
-                            print("Combination already used!")
-                            health_points -= 1
-                            if health_points == 0:
+                            hp -= 1
+                            print(f"Combination already used! Health points: {hp}")
+                            if hp == 0:
                                 game_over()
                             else:
-                                level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                      choice_count, made_choices)
+                                made_choices = made_choices[:-3]
+                                level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
+    choice_count2 += 1
 
-    if len(made_choices) > 6:
-        made_choices2 = [made_choices[3], made_choices[4], made_choices[5]]
-        for made_choice in made_choices2:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices2:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices2:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+    if choice_count2 == 1:
+        if len(made_choices) > 6:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 2:
+        if len(made_choices) > 9:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 3:
+        if len(made_choices) > 12:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 4:
+        if len(made_choices) > 15:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 5:
+        if len(made_choices) > 18:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 6:
+        if len(made_choices) > 21:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 7:
+        if len(made_choices) > 24:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 8:
+        if len(made_choices) > 27:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 9:
+        if len(made_choices) > 30:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    if choice_count2 == 10:
+        if len(made_choices) > 33:
+            len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                             choice_count, choice_count2, made_choices)
+    else:
+        points_reward(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count,
+                      made_choices)
+    points_reward(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
-    if len(made_choices) > 9:
-        made_choices3 = [made_choices[6], made_choices[7], made_choices[8]]
-        for made_choice in made_choices3:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices3:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices3:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+# ------------------------------------------------------------------------
 
-    if len(made_choices) > 12:
-        made_choices4 = [made_choices[9], made_choices[10], made_choices[11]]
-        for made_choice in made_choices4:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices4:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices4:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
 
-    if len(made_choices) > 15:
-        made_choices5 = [made_choices[12], made_choices[13], made_choices[14]]
-        for made_choice in made_choices5:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices5:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices5:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
-    if len(made_choices) > 18:
-        made_choices6 = [made_choices[15], made_choices[16], made_choices[17]]
-        for made_choice in made_choices6:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices6:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices6:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+def points_reward(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
+    points += 1
+    print(f"{click1.name}, {click2.name} and {click3.name} points: {points}")
+    level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
 
-    if len(made_choices) > 21:
-        made_choices7 = [made_choices[18], made_choices[19], made_choices[20]]
-        for made_choice in made_choices7:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices7:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices7:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+# ------------------------------------------------------------------------
 
-    if len(made_choices) > 24:
-        made_choices8 = [made_choices[21], made_choices[22], made_choices[23]]
-        for made_choice in made_choices8:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices8:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices8:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
 
-    if len(made_choices) > 27:
-        made_choices9 = [made_choices[24], made_choices[25], made_choices[26]]
-        for made_choice in made_choices9:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices9:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices9:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+def len_made_choices(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                     choice_count, choice_count2, made_choices):
 
-    if len(made_choices) > 30:
-        made_choices10 = [made_choices[27], made_choices[28], made_choices[29]]
-        for made_choice in made_choices10:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices10:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices10:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+    if choice_count2 == 1:
+        made_choices1 = made_choices[3:6]
+    if choice_count2 == 2:
+        made_choices1 = made_choices[6:9]
+    if choice_count2 == 3:
+        made_choices1 = made_choices[9:12]
+    if choice_count2 == 4:
+        made_choices1 = made_choices[12:15]
+    if choice_count2 == 5:
+        made_choices1 = made_choices[15:18]
+    if choice_count2 == 6:
+        made_choices1 = made_choices[18:21]
+    if choice_count2 == 7:
+        made_choices1 = made_choices[21:24]
+    if choice_count2 == 8:
+        made_choices1 = made_choices[24:27]
+    if choice_count2 == 9:
+        made_choices1 = made_choices[27:30]
+    if choice_count2 == 10:
+        made_choices1 = made_choices[30:33]
 
-    if len(made_choices) > 33:
-        made_choices11 = [made_choices[30], made_choices[31], made_choices[32]]
-        for made_choice in made_choices11:
-            if made_choices[-1] == made_choice:
-                for made_choice2 in made_choices11:
-                    if made_choices[-2] == made_choice2:
-                        for made_choice3 in made_choices11:
-                            if made_choices[-3] == made_choice3:
-                                print("Combination already used!")
-                                health_points -= 1
-                                if health_points == 0:
-                                    game_over()
-                                else:
-                                    level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-                                          choice_count, made_choices)
+    same_choices2(click1, click2, click3, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                  choice_count, choice_count2, made_choices, made_choices1)
 
 # ------------------------------------------------------------------------
 
@@ -405,65 +386,5 @@ def game_over():
 
 # ------------------------------------------------------------------------
 
-
-def choice(click1, click2, click3, points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3,
-           choice_count, made_choices):
-
-    if all([click1.color == click2.color, click1.color == click3.color,
-            click1.shape == click2.shape, click1.shape == click3.shape]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.color == click2.color, click1.color == click3.color,
-              click1.bg == click2.bg, click1.bg == click3.bg]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.shape == click2.shape, click1.shape == click3.shape,
-              click1.bg == click2.bg, click1.bg == click3.bg]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.color == click2.color, click1.color == click3.color,
-              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
-              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.shape == click2.shape, click1.shape == click3.shape,
-              click1.color != click2.color, click1.color != click3.color, click2.color != click3.color,
-              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.bg == click2.bg, click1 == click3.bg,
-              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
-              click1.color != click2.color, click1.color != click3.color, click2.color != click3.color]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    elif all([click1.color != click2.color, click1.color != click3.color, click2.color != click3.color,
-              click1.shape != click2.shape, click1.shape != click3.shape, click2.shape != click3.shape,
-              click1.bg != click2.bg, click1.bg != click3.bg, click2.bg != click3.bg]):
-        points += 1
-        print(f"{click1.name} and {click2.name} and {click3.name} points: {points}")
-        level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-    else:
-        health_points -= 1
-        print(f"{click1.name} and {click2.name} and {click3.name} are not a match! Health points: {health_points}")
-        if health_points == 0:
-            game_over()
-        else:
-            level(points, health_points, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
-
-
-# ------------------------------------------------------------------------
 
 new_game_easy()
