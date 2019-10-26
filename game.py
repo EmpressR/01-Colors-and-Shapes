@@ -1,66 +1,8 @@
 from random import choice
 from itertools import combinations
+import my_library
+import easy
 
-
-class Object:
-    def __init__(self, color, shape, bg, name):
-        self.color = color
-        self.shape = shape
-        self.bg = bg
-        self.name = name
-
-
-# ------------------------------------------------------------------------
-r_c_w = Object("red", "circle", "wbg", "RedCircleWhite")
-r_c_b = Object("red", "circle", "bbg", "RedCircleBlack")
-r_c_g = Object("red", "circle", "gbg", "RedCircleGray")
-
-r_s_w = Object("red", "square", "wbg", "RedSquareWhite")
-r_s_b = Object("red", "square", "bbg", "RedSquareBlack")
-r_s_g = Object("red", "square", "gbg", "RedSquareGray")
-
-r_t_w = Object("red", "triangle", "wbg", "RedTriangleWhite")
-r_t_b = Object("red", "triangle", "bbg", "RedTriangleBlack")
-r_t_g = Object("red", "triangle", "gbg", "RedTriangleGray")
-# ----------------------------------------------------
-b_c_w = Object("blue", "circle", "wbg", "BlueCircleWhite")
-b_c_b = Object("blue", "circle", "bbg", "BlueCircleBlack")
-b_c_g = Object("blue", "circle", "gbg", "BlueCircleGray")
-
-b_s_w = Object("blue", "square", "wbg", "BlueSquareWhite")
-b_s_b = Object("blue", "square", "bbg", "BlueSquareBlack")
-b_s_g = Object("blue", "square", "gbg", "BlueSquareGray")
-
-b_t_w = Object("blue", "triangle", "wbg", "BlueTriangleWhite")
-b_t_b = Object("blue", "triangle", "bbg", "BlueTriangleBlack")
-b_t_g = Object("blue", "triangle", "gbg", "BlueTriangleGray")
-# ----------------------------------------------------
-y_c_w = Object("yellow", "circle", "wbg", "YellowCircleWhite")
-y_c_b = Object("yellow", "circle", "bbg", "YellowCircleBlack")
-y_c_g = Object("yellow", "circle", "gbg", "YellowCircleGray")
-
-y_s_w = Object("yellow", "square", "wbg", "YellowSquareWhite")
-y_s_b = Object("yellow", "square", "bbg", "YellowSquareBlack")
-y_s_g = Object("yellow", "square", "gbg", "YellowSquareGray")
-
-y_t_w = Object("yellow", "triangle", "wbg", "YellowTriangleWhite")
-y_t_b = Object("yellow", "triangle", "bbg", "YellowTriangleBlack")
-y_t_g = Object("yellow", "triangle", "gbg", "YellowTriangleGray")
-# ------------------------------------------------------------------------
-
-my_objects = (
-    (r_c_w, r_c_b, r_c_g, r_s_w, r_s_b, r_s_g, r_t_w, r_t_b, r_t_g,
-     b_c_w, b_c_b, b_c_g, b_s_w, b_s_b, b_s_g, b_t_w, b_t_b, b_t_g,
-     y_c_w, y_c_b, y_c_g, y_s_w, y_s_b, y_s_g, y_t_w, y_t_b, y_t_g))
-
-# ------------------------------------------------------------------------
-
-
-def new_game_easy():
-
-    easy_points = 0
-    easy_health = 3
-    create_board(easy_points, easy_health)
 
 # ------------------------------------------------------------------------
 
@@ -68,7 +10,7 @@ def new_game_easy():
 def create_board(points, hp):
 
     board = []
-    for piece in my_objects:
+    for piece in my_library.my_objects:
         board.append(piece)
 
     a1 = choice(board)
@@ -95,10 +37,13 @@ def create_board(points, hp):
     c2 = choice(board)
     board.remove(c2)
 
+
     c3 = choice(board)
 
     print([f"A) {a1.name}, B) {a2.name}, C) {a3.name}, D) {b1.name}, E) {b2.name}, F) {b3.name}, "
            f" G) {c1.name}, H) {c2.name}, I) {c3.name}, N) No possible matches"])
+    print(f"{a1.name}, {a2.name}, {a3.name}, {b1.name}, {b2.name}, {b3.name}, "
+           f" {c1.name}, {c2.name}, {c3.name}")
     choice_count = 0
     made_choices = []
     level(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices)
@@ -162,6 +107,7 @@ def no_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, mad
         create_board(points, hp)
 
 # ------------------------------------------------------------------------
+# example made_choices a1, a2, a3, .. a1, a2, b1, .. a1, a2, b2, ...
 
 
 def check_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, made_choices):
@@ -169,15 +115,107 @@ def check_matches(points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3, choice_count, 
     checking = True
     used_board = [a1, a2, a3, b1, b2, b3, c1, c2, c3]
 
-    for x, y, z in combinations(used_board, 3):
-        print(zip(made_choices*3))
-        if any([(x, y, z), (x, z, y), (z, x, y), (z, y, x), [y, x, z], (y, z, x)]) not in zip(made_choices*3):
-            yes = choice1(x, y, z, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+    for a, b, c in combinations(used_board, 3):
+        if not made_choices:
+            print(a.name, b.name, c.name)
+            yes = choice1(a, b, c, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
                           choice_count, made_choices, checking)
             if yes:
                 print("True")
                 return True
+        else:
+            print("It is here")
+            print(a.name, b.name, c.name)
+            temp = [a, b, c]
+            temp2 = [a, c, b]
+            temp3 = [b, a, c]
+            temp4 = [b, c, a]
+            temp5 = [c, a, b]
+            temp6 = [c, b, a]
+
+            temp_count = 0
+            temp_list0_2 = []
+            temp_list3_5 = []
+            temp_list6_8 = []
+            temp_list9_11 = []
+            temp_list12_14 = []
+            temp_list15_17 = []
+            temp_list18_20 = []
+            temp_list21_23 = []
+            temp_list24_26 = []
+            temp_list27_29 = []
+            temp_list30_32 = []
+            temp_list33_35 = []
+
+            for i in made_choices:
+                if temp_count < 3:
+                    temp_list0_2.append(i)
+                    temp_count += 1
+                elif temp_count < 6:
+                    temp_list3_5.append(i)
+                    temp_count += 1
+                elif temp_count < 9:
+                    temp_list6_8.append(i)
+                    temp_count += 1
+                elif temp_count < 12:
+                    temp_list9_11.append(i)
+                    temp_count += 1
+                elif temp_count < 15:
+                    temp_list12_14.append(i)
+                    temp_count += 1
+                elif temp_count < 18:
+                    temp_list15_17.append(i)
+                    temp_count += 1
+                elif temp_count < 21:
+                    temp_list18_20.append(i)
+                    temp_count += 1
+                elif temp_count < 24:
+                    temp_list21_23.append(i)
+                    temp_count += 1
+                elif temp_count < 27:
+                    temp_list24_26.append(i)
+                    temp_count += 1
+                elif temp_count < 30:
+                    temp_list27_29.append(i)
+                    temp_count += 1
+                elif temp_count < 33:
+                    temp_list30_32.append(i)
+                    temp_count += 1
+                else:
+                    temp_list33_35.append(i)
+
+            combined_temp = [temp_list0_2, temp_list3_5, temp_list6_8, temp_list9_11, temp_list12_14, temp_list15_17,
+                             temp_list18_20, temp_list21_23, temp_list24_26, temp_list27_29, temp_list30_32,
+                             temp_list33_35]
+
+            if temp in combined_temp:
+                print("It was here1")
+                continue
+            elif temp2 in combined_temp:
+                print("It was here2")
+                continue
+            elif temp3 in combined_temp:
+                print("It was here3")
+                continue
+            elif temp4 in combined_temp:
+                print("It was here4")
+                continue
+            elif temp5 in combined_temp:
+                print("It was here5")
+                continue
+            elif temp6 in combined_temp:
+                print("It was here6")
+                continue
+            else:
+                print("Goes to choice")
+                yes = choice1(a, b, c, points, hp, a1, a2, a3, b1, b2, b3, c1, c2, c3,
+                              choice_count, made_choices, checking)
+                if yes:
+                    print("True")
+                    return True
+
     return False
+
 # ------------------------------------------------------------------------
 
 
@@ -382,9 +420,8 @@ def game_over():
 
     print("Game Over!")
     print("New game started!")
-    new_game_easy()
+    easy.new_game_easy()
 
 # ------------------------------------------------------------------------
 
 
-new_game_easy()
